@@ -1,0 +1,6 @@
+{
+  "name": "Czech Proofreader",
+  "description": "Robust Czech spelling, grammar, syntax checker and English to Czech translation with real-time feedback.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
