@@ -3,6 +3,7 @@ package com.example.data
 import android.util.Log
 import com.example.BuildConfig
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
 class ProofreaderRepository {
@@ -10,6 +11,30 @@ class ProofreaderRepository {
     private val apiService = RetrofitClient.service
     private val proofreadAdapter = RetrofitClient.moshi.adapter(ProofreadResponse::class.java)
     private val translationAdapter = RetrofitClient.moshi.adapter(TranslationResponse::class.java)
+
+    private suspend fun <T> retryIO(
+        times: Int = 3,
+        initialDelay: Long = 1000,
+        maxDelay: Long = 4000,
+        factor: Double = 2.0,
+        block: suspend () -> T
+    ): T {
+        var currentDelay = initialDelay
+        repeat(times - 1) { attempt ->
+            try {
+                return block()
+            } catch (e: Exception) {
+                if (e is kotlinx.coroutines.CancellationException) throw e
+                if (e is java.io.InterruptedIOException || e is java.net.SocketTimeoutException || e is java.net.ConnectException || e is java.net.UnknownHostException) {
+                    throw e
+                }
+                Log.w("ProofreaderRepository", "Linguist CZ API network attempt ${attempt + 1} failed: ${e.message}. Retrying in ${currentDelay}ms...")
+            }
+            delay(currentDelay)
+            currentDelay = (currentDelay * factor).toLong().coerceAtMost(maxDelay)
+        }
+        return block()
+    }
 
     /**
      * Checks Czech text for grammar, spelling, syntax, and stylistic issues.
@@ -48,7 +73,9 @@ class ProofreaderRepository {
             throw IllegalStateException("API_KEY_MISSING")
         }
 
-        val apiResponse = apiService.generateContent(apiKey, request)
+        val apiResponse = retryIO {
+            apiService.generateContent(apiKey, request)
+        }
         val responseText = apiResponse.candidates?.firstOrNull()?.content?.parts?.firstOrNull()?.text
             ?: throw IllegalStateException("Empty response from Gemini")
 
@@ -91,7 +118,9 @@ class ProofreaderRepository {
             throw IllegalStateException("API_KEY_MISSING")
         }
 
-        val apiResponse = apiService.generateContent(apiKey, request)
+        val apiResponse = retryIO {
+            apiService.generateContent(apiKey, request)
+        }
         val responseText = apiResponse.candidates?.firstOrNull()?.content?.parts?.firstOrNull()?.text
             ?: throw IllegalStateException("Empty response from Gemini")
 
