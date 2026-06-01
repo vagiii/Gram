@@ -110,7 +110,13 @@ object CzechOfflineEngine {
 
         for (typo in typoReplacements) {
             if (typo is Typos) {
-                val pattern = "\\b${typo.original}\\b".toRegex(RegexOption.IGNORE_CASE)
+                val escaped = Regex.escape(typo.original)
+                val patternString = if (typo.original.endsWith(".")) {
+                    "(?U)\\b$escaped"
+                } else {
+                    "(?U)\\b$escaped\\b"
+                }
+                val pattern = patternString.toRegex(RegexOption.IGNORE_CASE)
                 if (pattern.containsMatchIn(correctedText)) {
                     val matches = pattern.findAll(text)
                     for (match in matches) {

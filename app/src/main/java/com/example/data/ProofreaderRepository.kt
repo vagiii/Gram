@@ -82,23 +82,19 @@ class ProofreaderRepository {
             return@withContext proofreadAdapter.fromJson(cleanJson) ?: throw IllegalStateException("Failed to parse proofread JSON")
         } catch (e: Exception) {
             if (e is kotlinx.coroutines.CancellationException) throw e
-            if (e is java.io.InterruptedIOException || e is java.net.SocketTimeoutException || e is java.net.ConnectException || e is java.net.UnknownHostException || e is java.io.IOException) {
-                Log.w("ProofreaderRepository", "Network timeout or connect error calling Gemini. Falling back to CzechOfflineEngine: ${e.message}")
-                val fallbackResponse = CzechOfflineEngine.proofread(text)
-                // Add a cute indicator issue as a style note
-                val indicatorIssue = ProofreadIssue(
-                    original = text.split(" ").firstOrNull() ?: "",
-                    replacement = text.split(" ").firstOrNull() ?: "",
-                    type = "style",
-                    explanation = "Aktivován lokální offline režim opravy pravidel (AI server neodpověděl včas/Timeout)."
-                )
-                val cleanIssues = if (text.isNotBlank()) listOf(indicatorIssue) + fallbackResponse.issues else fallbackResponse.issues
-                return@withContext fallbackResponse.copy(
-                    issues = cleanIssues.distinctBy { it.original }
-                )
-            } else {
-                throw e
-            }
+            Log.w("ProofreaderRepository", "Gemini API call failed, falling back to CzechOfflineEngine: ${e.message}")
+            val fallbackResponse = CzechOfflineEngine.proofread(text)
+            // Add a cute indicator issue as a style note
+            val indicatorIssue = ProofreadIssue(
+                original = text.split(" ").firstOrNull() ?: "",
+                replacement = text.split(" ").firstOrNull() ?: "",
+                type = "style",
+                explanation = "Aktivován lokální offline režim opravy pravidel (AI server neodpověděl včas/Timeout)."
+            )
+            val cleanIssues = if (text.isNotBlank()) listOf(indicatorIssue) + fallbackResponse.issues else fallbackResponse.issues
+            return@withContext fallbackResponse.copy(
+                issues = cleanIssues.distinctBy { it.original }
+            )
         }
     }
 
@@ -148,20 +144,16 @@ class ProofreaderRepository {
             return@withContext translationAdapter.fromJson(cleanJson) ?: throw IllegalStateException("Failed to parse translation JSON")
         } catch (e: Exception) {
             if (e is kotlinx.coroutines.CancellationException) throw e
-            if (e is java.io.InterruptedIOException || e is java.net.SocketTimeoutException || e is java.net.ConnectException || e is java.net.UnknownHostException || e is java.io.IOException) {
-                Log.w("ProofreaderRepository", "Network timeout or connect error translating. Falling back to CzechOfflineEngine: ${e.message}")
-                val fallbackResponse = CzechOfflineEngine.translate(text)
-                return@withContext fallbackResponse.copy(
-                    notes = listOf(
-                        TranslationGrammarNote(
-                            phrase = "Offline režim",
-                            explanation = "Byl aktivován lokální offline režim, protože server Gemini neodpověděl v časovém limitu."
-                        )
-                    ) + fallbackResponse.notes
-                )
-            } else {
-                throw e
-            }
+            Log.w("ProofreaderRepository", "Gemini translation failed, falling back to CzechOfflineEngine: ${e.message}")
+            val fallbackResponse = CzechOfflineEngine.translate(text)
+            return@withContext fallbackResponse.copy(
+                notes = listOf(
+                    TranslationGrammarNote(
+                        phrase = "Offline režim",
+                        explanation = "Byl aktivován lokální offline režim, protože server Gemini neodpověděl v časovém limitu."
+                    )
+                ) + fallbackResponse.notes
+            )
         }
     }
 

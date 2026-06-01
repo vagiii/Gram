@@ -93,7 +93,7 @@ fun ProofreaderScreen(
                                 color = Color(0xFF1A1C1E)
                             )
                             Text(
-                                text = "Kontrola v reálném čase",
+                                text = "Překlad a manuální korektura",
                                 fontSize = 11.sp,
                                 color = Color(0xFF44474E),
                                 fontWeight = FontWeight.Normal
@@ -1075,7 +1075,7 @@ private fun _RealTimeStatusContainer(
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.1f))
             ) {
                 Text(
-                    text = "Reálný čas zapnut",
+                    text = "Manuální režim",
                     style = MaterialTheme.typography.labelSmall,
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Bold,

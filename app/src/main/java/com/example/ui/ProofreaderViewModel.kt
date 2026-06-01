@@ -71,17 +71,6 @@ class ProofreaderViewModel(
 
         if (newText.trim().isEmpty()) {
             _proofreadState.value = ProofreadUiState.Idle
-            return
-        }
-
-        // Set a subtle progress state to show we've registered typing and will check shortly
-        if (_proofreadState.value !is ProofreadUiState.Success) {
-            _proofreadState.value = ProofreadUiState.CheckingProgress
-        }
-
-        proofreadJob = viewModelScope.launch {
-            delay(1200) // 1.2s typing debounce for real-time feel without rate limits
-            runProofread(newText)
         }
     }
 
@@ -148,16 +137,6 @@ class ProofreaderViewModel(
 
         if (newText.trim().isEmpty()) {
             _translateState.value = TranslateUiState.Idle
-            return
-        }
-
-        if (_translateState.value !is TranslateUiState.Success) {
-            _translateState.value = TranslateUiState.TranslatingProgress
-        }
-
-        translateJob = viewModelScope.launch {
-            delay(1500) // Slightly longer debounce for translation
-            runTranslation(newText)
         }
     }
 
