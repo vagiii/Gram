@@ -10,7 +10,7 @@ internal object CzechSubjectPredicateRules {
     private enum class AgreementClass { MASCULINE_ANIMATE, NON_MASCULINE_ANIMATE, NEUTER }
     private data class Token(val text: String, val start: Int, val end: Int)
 
-    private val tokenPattern = Regex("(?U)\\b[\\p{L}]+\\b")
+    private val tokenPattern = Regex("[\\p{L}\\p{M}]+")
     private const val MAX_SUBJECT_DISTANCE = 6
 
     private val subjectClasses: Map<String, AgreementClass> = buildMap {
