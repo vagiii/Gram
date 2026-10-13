@@ -111,9 +111,9 @@ object CzechOfflineEngine {
             if (typo is Typos) {
                 val escaped = Regex.escape(typo.original)
                 val patternString = if (typo.original.endsWith(".")) {
-                    "(?U)\\b$escaped"
+                    "(?<![\\p{L}\\p{M}])$escaped"
                 } else {
-                    "(?U)\\b$escaped\\b"
+                    "(?<![\\p{L}\\p{M}])$escaped(?![\\p{L}\\p{M}])"
                 }
                 val pattern = patternString.toRegex(RegexOption.IGNORE_CASE)
                 if (pattern.containsMatchIn(correctedText)) {
