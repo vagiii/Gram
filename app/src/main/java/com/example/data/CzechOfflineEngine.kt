@@ -104,6 +104,7 @@ object CzechOfflineEngine {
             Typos("pro mně", "pro mě", "grammar", "Ve 4. pádě zájmena já používáme tvar 'mě'. Tvar 'mně' je nesprávný."),
             Typos("do mně", "do mě", "grammar", "Ve 2. pádě používáme tvar 'mě', nikoli 'mně'."),
             Typos("bez mně", "beze mě", "grammar", "Po předložce 'bez' píšeme 'beze mě' / 'beze mne'."),
+            Typos("krví desítky", "krví desítek", "grammar", "Po výrazu označujícím množství je zde potřeba 2. pád: krví desítek Anaraků."),
             Typos("o mě", "o mně", "grammar", "V 6. pádě po předložce 'o' se píše zásadně tvar 'mně' (mluvit o mně).")
         )
 
