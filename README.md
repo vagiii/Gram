@@ -8,13 +8,22 @@ Pravopisná a gramatická pravidla se vyhodnocují lokálně v aplikaci. Text p�
 
 ## Vyzkoušení aplikace
 
+### Stažení APK z GitHubu
+
+1. Otevři záložku **Actions** v repozitáři.
+2. Vyber poslední běh **Build Android APK** na větvi `main`.
+3. V sekci **Artifacts** stáhni `gram-debug-apk`.
+4. Rozbal ZIP a nainstaluj `app-debug.apk` do telefonu.
+
+APK se vytvoří automaticky při každé změně větve `main`. Artifakty jsou dostupné 14 dní. Debug APK může vyžadovat povolení instalace z prohlížeče/správce souborů.
+
+### Sestavení v Android Studiu
+
 1. Stáhni repozitář a otevři jeho složku v Android Studiu.
 2. Nech Android Studio doinstalovat požadované Android SDK (API 36.1) a synchronizovat Gradle.
 3. Vyber připojený telefon nebo emulátor a spusť konfiguraci app tlačítkem Run.
 
-Pro vytvoření instalačního APK zvol v Android Studiu **Build > Build APK(s)**. Soubor najdeš v app/build/outputs/apk/debug/app-debug.apk. Pro samotnou korekturu není potřeba API klíč ani internet; Gemini klíč v lokálním souboru .env je potřeba jen pro překlad.
-
-Gemini se používá pouze pro překlad z angličtiny; česká korektura běží offline.
+Pro samotnou korekturu není potřeba API klíč ani internet. Gemini klíč v lokálním souboru `.env` je potřeba pouze pro překlad.
 
 ## Technologie
 
