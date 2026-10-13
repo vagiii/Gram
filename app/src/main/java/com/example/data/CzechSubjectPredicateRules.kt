@@ -136,10 +136,10 @@ internal object CzechSubjectPredicateRules {
 
     private fun explanation(expectedClass: AgreementClass): String = when (expectedClass) {
         AgreementClass.MASCULINE_ANIMATE ->
-            "Podmět zahrnuje mužský životný rod v množném čísle, proto má příčestí minulý koncovku -i."
+            "Podmět zahrnuje mužský životný rod v množném čísle, proto má příčestí minulé koncovku -i."
         AgreementClass.NON_MASCULINE_ANIMATE ->
             "U tohoto ženského nebo neživotného podmětu v množném čísle píšeme v příčestí minulém -y."
         AgreementClass.NEUTER ->
-            "Podmět je v množném čísle rodu středního, proto má příčestí minulém koncovku -a."
+            "Podmět je v množném čísle rodu středního, proto má příčestí minulé koncovku -a."
     }
 }
