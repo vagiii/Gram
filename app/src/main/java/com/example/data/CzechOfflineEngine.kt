@@ -109,16 +109,23 @@ object CzechOfflineEngine {
 
         for (typo in typoReplacements) {
             if (typo is Typos) {
-                val escaped = Regex.escape(typo.original)
-                val patternString = if (typo.original.endsWith(".")) {
-                    "(?<![\\p{L}\\p{M}])$escaped"
-                } else {
-                    "(?<![\\p{L}\\p{M}])$escaped(?![\\p{L}\\p{M}])"
+                val pattern = Regex(Regex.escape(typo.original), RegexOption.IGNORE_CASE)
+                fun isWholeWord(source: String, match: MatchResult): Boolean {
+                    val startsAfterWordChar = match.range.first > 0 &&
+                        source[match.range.first - 1].isLetterOrDigit()
+                    val endsBeforeWordChar = match.range.last + 1 < source.length &&
+                        source[match.range.last + 1].isLetterOrDigit()
+                    return !startsAfterWordChar && !endsBeforeWordChar
                 }
-                val pattern = patternString.toRegex(RegexOption.IGNORE_CASE)
-                if (pattern.containsMatchIn(correctedText)) {
-                    val matches = pattern.findAll(text)
-                    for (match in matches) {
+
+                val matchingOccurrences = pattern.findAll(correctedText)
+                    .filter { isWholeWord(correctedText, it) }
+                    .toList()
+                if (matchingOccurrences.isNotEmpty()) {
+                    val originalMatches = pattern.findAll(text)
+                        .filter { isWholeWord(text, it) }
+                        .toList()
+                    for (match in originalMatches) {
                         issues.add(
                             ProofreadIssue(
                                 original = match.value,
@@ -128,7 +135,9 @@ object CzechOfflineEngine {
                             )
                         )
                     }
-                    correctedText = pattern.replace(correctedText, typo.replacement)
+                    correctedText = pattern.replace(correctedText) { matchResult ->
+                        if (isWholeWord(correctedText, matchResult)) typo.replacement else matchResult.value
+                    }
                 }
             } else if (typo is TyopsPattern) {
                 if (typo.pattern.containsMatchIn(correctedText)) {
