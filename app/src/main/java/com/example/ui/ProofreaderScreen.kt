@@ -87,13 +87,13 @@ fun ProofreaderScreen(
                         }
                         Column {
                             Text(
-                                text = "Linguist CZ",
+                                text = "Gram",
                                 fontWeight = FontWeight.SemiBold,
                                 style = MaterialTheme.typography.titleMedium,
                                 color = Color(0xFF1A1C1E)
                             )
                             Text(
-                                text = "Překlad a manuální korektura",
+                                text = "Offline česká gramatika",
                                 fontSize = 11.sp,
                                 color = Color(0xFF44474E),
                                 fontWeight = FontWeight.Normal
