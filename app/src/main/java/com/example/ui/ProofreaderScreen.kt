@@ -390,14 +390,14 @@ fun ProofreadTabContent(
             }
             is ProofreadUiState.Loading -> {
                 item {
-                    FullLoadingCard(message = "Běží hloubková kontrola pravopisu, gramatiky a skladby...")
+                    FullLoadingCard(message = "Kontroluji text lokálně v zařízení...")
                 }
             }
             is ProofreadUiState.Error -> {
                 item {
                     ErrorAlertCard(
                         message = proofreadState.message,
-                        isApiKeyMissing = proofreadState.isApiKeyMissing,
+                        isApiKeyMissing = false,
                         onRetry = onTriggerManual
                     )
                 }
@@ -967,7 +967,7 @@ fun RealTimeStatusHeader(state: ProofreadUiState, textLength: Int) {
             }
             is ProofreadUiState.Error -> {
                 Text(
-                    text = "Chyba připojení API",
+                    text = "Chyba místní kontroly",
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.error,
                     fontSize = 13.sp
@@ -1025,7 +1025,7 @@ fun RealTimeStatusHeaderTranslation(state: TranslateUiState, textLength: Int) {
             }
             is TranslateUiState.Error -> {
                 Text(
-                    text = "Chyba připojení API",
+                    text = "Chyba překladu",
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.error,
                     fontSize = 13.sp

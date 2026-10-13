@@ -90,10 +90,9 @@ class ProofreaderViewModel(
             val response = repository.proofreadCzech(text)
             _proofreadState.value = ProofreadUiState.Success(response)
         } catch (e: Exception) {
-            val isKeyMissing = e.message == "API_KEY_MISSING" || e is IllegalStateException && e.message?.contains("API_KEY") == true
             _proofreadState.value = ProofreadUiState.Error(
-                message = e.localizedMessage ?: "Unknown network error. Check connection.",
-                isApiKeyMissing = isKeyMissing
+                message = "Místní kontrola selhala: ${e.localizedMessage ?: "neznámá chyba"}.",
+                isApiKeyMissing = false
             )
         }
     }
