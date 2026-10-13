@@ -93,7 +93,6 @@ object CzechOfflineEngine {
             Typos("zůčastnit", "zúčastnit", "spelling", "Po předponách píšeme u kořene slova začínajícího na 'ú' čárku zdola nahoru 'ú' (zúčastnit se od účast)."),
             Typos("zůčastnil", "zúčastnil", "spelling", "Slovo píšeme jako 'zúčastnil' od slova 'účast'."),
             Typos("zůčastním", "zúčastním", "spelling", "Správny tvar je 'zúčastním' s čárkovaným 'ú'."),
-            Typos("zkontrolovat", "zkontrolovat", "spelling", "Pravopis předpony: ve slově 'zkontrolovat' píšeme předponu 'z-', protože dochází ke změně stavu dokončení."),
             TyopsPattern("\\bshlédnout (film|video|představení|seriál)\\b".toRegex(RegexOption.IGNORE_CASE), "zhlédnout", "grammar", "Pro sledování filmů, divadelních her nebo videí se používá sloveso 'zhlédnout' s 'z-'."),
             Typos("potencionální", "potenciální", "spelling", "Pravopisně správný tvar je pouze 'potenciální' (odvozeno od potenciál), tvar 'potencionální' je chybný."),
             Typos("kvůly", "kvůli", "spelling", "Po L v předložce 'kvůli' píšeme měkké 'i'."),
@@ -174,6 +173,12 @@ object CzechOfflineEngine {
             correctedText = sentenceStartRegex.replace(correctedText) { matchResult ->
                 matchResult.groupValues[1] + matchResult.groupValues[2].uppercase()
             }
+        }
+
+        val agreementIssues = CzechSubjectPredicateRules.check(text)
+        issues.addAll(agreementIssues)
+        for (issue in agreementIssues) {
+            correctedText = correctedText.replaceFirst(issue.original, issue.replacement)
         }
 
         return ProofreadResponse(

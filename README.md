@@ -1,21 +1,21 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# Gram — česká korektura pro Android
 
-# Run and deploy your AI Studio app
+Gram je Android aplikace pro českou korekturu a překlad do češtiny.
 
-This contains everything you need to run your app locally.
+## Česká korektura
 
-View your app in AI Studio: https://ai.studio/apps/405f6214-2b8d-4645-b174-ab237a7d13bf
+Pravopisná a gramatická pravidla se vyhodnocují lokálně v aplikaci. Text při kontrole neopouští zařízení a korektura nepotřebuje API klíč. Kontrola shody podmětu s přísudkem pokrývá běžné tvary a známá podstatná jména v množném čísle (například „Děti běželi“ → „Děti běžely“). U neznámých podmětů a složitějších souvětí aplikace raději chybu neoznačí; nejde o úplnou morfologickou analýzu češtiny.
 
-## Run Locally
+## Spuštění
 
-**Prerequisites:**  [Android Studio](https://developer.android.com/studio)
+1. Otevři projekt v Android Studiu.
+2. Pro volitelný překlad nastav GEMINI_API_KEY v lokálním souboru .env.
+3. Spusť konfiguraci app na zařízení nebo emulátoru.
 
+Gemini se používá pouze pro překlad z angličtiny; česká korektura běží offline.
 
-1. Open Android Studio
-2. Select **Open** and choose the directory containing this project
-3. Allow Android Studio to fix any incompatibilities as it imports the project.
-4. Create a file named `.env` in the project directory and set `GEMINI_API_KEY` in that file to your Gemini API key (see `.env.example` for an example)
-5. Remove this line from the app's `build.gradle.kts` file: `signingConfig = signingConfigs.getByName("debugConfig")`
-6. Run the app on an emulator or physical device
+## Technologie
+
+- Kotlin a Jetpack Compose
+- vlastní lokální pravidla pro český pravopis a shodu podmětu s přísudkem
+- Gemini API pouze pro samostatnou funkci překladu
