@@ -351,7 +351,7 @@ export const CZECH_GRAMMAR_RULES = [
         const precedingText = sentence.text.slice(0, conjunctionStart);
         // When two subordinate conjunctions meet, the comma belongs before
         // the first conjunction, not between them: "řekl, že pokud...".
-        if (/\b(?:že|aby|abych|abys|abychom|abyšte|protože|jelikož|když|pokud|jakmile|ačkoliv|přestože|zatímco)\s*$/i.test(precedingText)) continue;
+        if (/(?:^|\s)(?:že|aby|abych|abys|abychom|abyšte|protože|jelikož|když|pokud|jakmile|ačkoliv|přestože|zatímco)\s*$/i.test(precedingText)) continue;
         matches.push({
           startIndex: sentence.startIndex + m.index + m[1].length + 1,
           endIndex: sentence.startIndex + m.index + m[0].length,
