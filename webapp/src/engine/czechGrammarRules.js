@@ -355,9 +355,11 @@ export const CZECH_GRAMMAR_RULES = [
         // the first conjunction, not between them: "řekl, že pokud...".
         if (/(?:^|\s)(?:že|aby|abych|abys|abychom|abyšte|protože|jelikož|když|pokud|jakmile|ačkoliv|přestože|zatímco)\s*$/i.test(precedingText)) continue;
         matches.push({
-          startIndex: sentence.startIndex + m.index + m[1].length + 1,
+          // Replace the existing space together with the conjunction, so the
+          // inserted comma does not leave a space before itself.
+          startIndex: sentence.startIndex + m.index + m[1].length,
           endIndex: sentence.startIndex + m.index + m[0].length,
-          originalText: conj,
+          originalText: m[0].slice(m[1].length),
           suggestions: [`, ${conj}`],
           message: `Před podřadicí spojkou nebo vztažným zájmenem '${conj}' chybí čárka oddělující věty v souvětí.`
         });
@@ -379,9 +381,9 @@ export const CZECH_GRAMMAR_RULES = [
       while ((m = regex.exec(sentence.text)) !== null) {
         const conj = m[2];
         matches.push({
-          startIndex: sentence.startIndex + m.index + m[1].length + 1,
+          startIndex: sentence.startIndex + m.index + m[1].length,
           endIndex: sentence.startIndex + m.index + m[0].length,
-          originalText: conj,
+          originalText: m[0].slice(m[1].length),
           suggestions: [`, ${conj}`],
           message: `Před odporovací spojkou '${conj}' má být napsána čárka.`
         });
