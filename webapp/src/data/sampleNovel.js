@@ -17,9 +17,9 @@ export const INITIAL_NOVEL = {
 
 Havlíček se na ně podíval a chladně řekl: „Děkuji vám, že jste přijely. Víte pro mně něco nového?“
 
-Klára vykročila vpřed, vyndala z pláště dopis a podala ji inspektorovi. „Tento dopis nám dál přímo tajemný muž v klobouku. Řekl mě, že pokud ho neotevřeme do půlnoci, stane se neštěstí.“
+Klára vykročila vpřed, vyndala z pláště dopis a podala ho inspektorovi. „Tento dopis nám přímo předal tajemný muž v klobouku. Řekl mě, že pokud ho neotevřeme do půlnoci, stane se neštěstí.“
 
-Havlíček se podíval na dopis a vzal ho z mojí ruky. Ve světle svíce viděl, že razítko pochází z lavičky u Vltavy. Byl to vlastně velmi krátký okamžik, kdy se všichni lekli. Jakoby se celý svět na vteřinu zastavil.
+Havlíček se podíval na dopis a vzal ho z mojí ruky. Ve světle svíce viděl, že razítko pochází z lavičky u Vltavy. Byl to vlastně velmi krátký okamžik, kdy se všichni lekli. Jako by se celý svět na vteřinu zastavil.
 
 Chlapci šly mezitím druhým břehem směrem k Malé Straně. Věděli, že musí nabýt novou baterii do svítilny a jít si mít ruce do kašny.`
         },

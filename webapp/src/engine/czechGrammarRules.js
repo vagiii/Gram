@@ -98,7 +98,7 @@ export const CZECH_GRAMMAR_RULES = [
     category: GRAMMAR_CATEGORIES.PRONOUNS.id,
     severity: "error",
     name: "Psaní Mě / Mně po slovesech (2./4. pád = mě, 3./6. pád = mně)",
-    explanation: "Pomůcka: Zaskloňujte si zájmeno 'ty/tobě' nebo 'vašeho/vám'. Pokud můžete říct 'tě / těbe' (2. a 4. pád), píše se MĚ (2 písmena). Pokud 'tobě' (3. a 6. pád), píše se MNĚ (3 písmena).",
+    explanation: "Pomůcka: Zaskloňujte si zájmeno 'ty/tobě' nebo 'vašeho/vám'. Pokud můžete říct 'tě / tebe' (2. a 4. pád), píše se MĚ (2 písmena). Pokud 'tobě' (3. a 6. pád), píše se MNĚ (3 písmena); ve 3. pádě se běžně používá také krátké MI.",
     check: (sentence) => {
       const matches = [];
       // 4th case verbs expecting MĚ (e.g. vidí mě, miluje mě, překvapil mě, zná mě, slyší mě, viděl mně -> error)
@@ -116,20 +116,20 @@ export const CZECH_GRAMMAR_RULES = [
       }
 
       // 3rd case verbs expecting MNĚ (e.g. řekl mě, pomohl mě, rozumí mě, věří mě, napsal mě -> error)
-      const verb3rdWithMe = /\b(říká|řekl|pomohl|pomáhá|rozumí|rozuměl|věří|věřil|napsal|předal|popřál|daroval|odpustil)\b\s+(mě)\b/gi;
+      const verb3rdWithMe = /\b(říká|řekl|řekla|řekli|řekly|řeklo|pomohl|pomohla|pomohli|pomáhá|pomáhal|rozumí|rozuměl|rozuměla|věří|věřil|věřila|napsal|napsala|předal|předala|popřál|popřála|daroval|darovala|odpustil|odpustila)\b\s+(mě)\b/gi;
       while ((m = verb3rdWithMe.exec(sentence.text)) !== null) {
         const meText = m[2];
         matches.push({
           startIndex: sentence.startIndex + m.index + m[0].length - meText.length,
           endIndex: sentence.startIndex + m.index + m[0].length,
           originalText: meText,
-          suggestions: ["mně"],
-          message: `Po slovesu '${m[1]}' následuje 3. pád (komu/čemu -> tobě/mně). Správný tvar je 'mně'. Pomůcka: Řekl mně (tobě).`
+          suggestions: ["mi", "mně"],
+          message: `Po slovesu '${m[1]}' následuje 3. pád. Běžně se píše 'mi'; důrazné 'mně' je také správně.`
         });
       }
 
       // Prepositions expecting MĚ (pro mě, přes mě, za mě, ob mě, beze mě) vs MNĚ (o mně, v mně, při mně, ke mně, díky mně)
-      const prep4thWithMne = /\b(pro|přes|beze|ob)\s+(mně)\b/gi;
+      const prep4thWithMne = /\b(pro|přes|beze|ob|za)\s+(mně)\b/gi;
       while ((m = prep4thWithMne.exec(sentence.text)) !== null) {
         matches.push({
           startIndex: sentence.startIndex + m.index + m[1].length + 1,
@@ -293,7 +293,7 @@ export const CZECH_GRAMMAR_RULES = [
       }
 
       // "jdu si mít ruce" -> mýt
-      const mitVsMyt = /\b(jdu\s+si|chci\s+si|musím\s+si)\s+(mít)\b/gi;
+      const mitVsMyt = /\b(jdu\s+si|jít\s+si|šel\s+si|šla\s+si|šli\s+si|chci\s+si|musím\s+si)\s+(mít)\b/gi;
       while ((m = mitVsMyt.exec(sentence.text)) !== null) {
         matches.push({
           startIndex: sentence.startIndex + m.index + m[1].length + 1,
@@ -305,7 +305,7 @@ export const CZECH_GRAMMAR_RULES = [
       }
 
       // "nabýt telefon" -> nabít
-      const nabytTelefon = /\b(nabýt)\s+(telefon|baterii|mobil|zbraň|akumulátor)\b/gi;
+      const nabytTelefon = /\b(nabýt)\s+(?:(?:novou|vybitou|slabou)\s+)?(telefon|baterii|mobil|zbraň|akumulátor)\b/gi;
       while ((m = nabytTelefon.exec(sentence.text)) !== null) {
         matches.push({
           startIndex: sentence.startIndex + m.index,
@@ -339,7 +339,7 @@ export const CZECH_GRAMMAR_RULES = [
     category: GRAMMAR_CATEGORIES.PUNCTUATION.id,
     severity: "warning",
     name: "Chybějící čárka před podřadicí spojkou / zájmenem",
-    explanation: "V češtině se před podřadicími spojkami (že, aby, protože, když, jelikož, pokud, jakmile, ačkoliv, zatímco) a vztažnými zájmeny (který, jenž) v souvětí VŽDY píše čárka.",
+    explanation: "Vedlejší větu obvykle oddělujeme od řídící čárkou. Setkají-li se vedle sebe dva spojovací výrazy patřící různým větám (např. 'že pokud'), čárka se zpravidla píše jen před prvním.",
     check: (sentence) => {
       const matches = [];
       // Match word boundary without a comma before sub-conjunctions
@@ -347,6 +347,10 @@ export const CZECH_GRAMMAR_RULES = [
       let m;
       while ((m = regex.exec(sentence.text)) !== null) {
         const conj = m[2];
+        const precedingText = sentence.text.slice(0, m.index);
+        // When two subordinate conjunctions meet, the comma belongs before
+        // the first conjunction, not between them: "řekl, že pokud...".
+        if (/\b(?:že|aby|abych|abys|abychom|abyšte|protože|jelikož|když|pokud|jakmile|ačkoliv|přestože|zatímco)\s*$/i.test(precedingText)) continue;
         matches.push({
           startIndex: sentence.startIndex + m.index + m[1].length + 1,
           endIndex: sentence.startIndex + m.index + m[0].length,
