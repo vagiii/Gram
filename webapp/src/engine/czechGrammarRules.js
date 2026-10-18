@@ -510,5 +510,28 @@ export const CZECH_GRAMMAR_RULES = [
       }
       return matches;
     }
+  },
+
+  {
+    id: "PNC-004",
+    category: GRAMMAR_CATEGORIES.PUNCTUATION.id,
+    severity: "warning",
+    name: "Mezera před interpunkcí",
+    explanation: "Čárka, tečka, dvojtečka, středník, otazník ani vykřičník se neoddělují mezerou od předchozího slova.",
+    check: (sentence) => {
+      const matches = [];
+      const regex = /[ \t]+([,.;:!?])/g;
+      let m;
+      while ((m = regex.exec(sentence.text)) !== null) {
+        matches.push({
+          startIndex: sentence.startIndex + m.index,
+          endIndex: sentence.startIndex + m.index + m[0].length,
+          originalText: m[0],
+          suggestions: [m[1]],
+          message: "Před interpunkčním znaménkem se nepíše mezera."
+        });
+      }
+      return matches;
+    }
   }
 ];
