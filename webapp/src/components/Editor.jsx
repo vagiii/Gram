@@ -87,13 +87,20 @@ export default function Editor({
 
     if (viewMode === "editor" && textareaRef.current) {
       const ta = textareaRef.current;
-      ta.focus();
       setTimeout(() => {
+        const isNarrowScreen = window.matchMedia("(max-width: 820px)").matches;
+        if (!isNarrowScreen) ta.focus();
         ta.setSelectionRange(selectedIssue.startIndex, selectedIssue.endIndex);
         try {
           const offsetTop = getSelectionScrollTop(ta, text, selectedIssue.startIndex);
-          // Center the caret in the textarea
-          const targetScroll = offsetTop - ta.clientHeight / 2;
+          // On phones, the proofread drawer covers the bottom of the editor.
+          // Center the issue in the visible part and keep the keyboard closed
+          // while the user is only browsing suggestions.
+          const drawerHeight = isNarrowScreen
+            ? document.querySelector(".grammar-panel")?.getBoundingClientRect().height || 0
+            : 0;
+          const visibleHeight = Math.max(0, ta.clientHeight - drawerHeight);
+          const targetScroll = offsetTop - visibleHeight / 2;
           ta.scrollTo({ top: Math.max(0, targetScroll), behavior: "smooth" });
         } catch (err) {
           console.error("Mirror scroll failed, fallback to line breaks:", err);
