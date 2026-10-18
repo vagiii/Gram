@@ -20,7 +20,7 @@ export const CZECH_GRAMMAR_RULES = [
     name: "Shoda: Ženský rod v mn. č. (-ly vs -li)",
     explanation: "Pokud je podmět v množném čísle rodu ženského (např. dívky, ženy, matky, dětí), v příčestí činném píšeme tvrdé Y (přišly, viděly). Koncovka -li se používá pouze pro rod mužský životný.",
     check: (sentence) => {
-      const regex = /\b(dívky|ženy|matky|sestry|učitelky|kolegyně|kamarádky|dětí|postavy|vlny|hvězdy|zbraně|otázky)\b\s+([^.!?]*?\b)(\w+li)\b/gi;
+      const regex = /(?<![\p{L}\p{N}_])(dívky|ženy|matky|sestry|učitelky|kolegyně|kamarádky|dětí|postavy|vlny|hvězdy|zbraně|otázky)(?![\p{L}\p{N}_])\s+([^.!?]*?)(?<![\p{L}\p{N}_])([\p{L}]+li)(?![\p{L}\p{N}_])/giu;
       const matches = [];
       let match;
       while ((match = regex.exec(sentence.text)) !== null) {
@@ -47,7 +47,7 @@ export const CZECH_GRAMMAR_RULES = [
     name: "Shoda: Mužský životný rod v mn. č. (-li vs -ly)",
     explanation: "Je-li v podmětu alespoň jedno podstatné jméno rodu mužského životného (např. chlapci, muži, lidé, psi, voáci), píšeme v příčestí minulém měkké I (přišli, viděli, bojovali).",
     check: (sentence) => {
-      const regex = /\b(chlapci|muži|lidé|lidé|kluci|otcové|bratři|učitelé|spisovatelé|hrdinové|páni|vojáci|psi|lékaři)\b\s+([^.!?]*?\b)(\w+ly)\b/gi;
+      const regex = /(?<![\p{L}\p{N}_])(chlapci|muži|lidé|kluci|otcové|bratři|učitelé|spisovatelé|hrdinové|páni|vojáci|psi|lékaři)(?![\p{L}\p{N}_])\s+([^.!?]*?)(?<![\p{L}\p{N}_])([\p{L}]+ly)(?![\p{L}\p{N}_])/giu;
       const matches = [];
       let match;
       while ((match = regex.exec(sentence.text)) !== null) {
@@ -73,7 +73,7 @@ export const CZECH_GRAMMAR_RULES = [
     name: "Shoda: Střední rod v mn. č. (-la vs -li/-ly)",
     explanation: "Podmět rodu středního v množném čísle (např. města, okna, auta, slova, dívčata) vyžaduje koncovku příčestí minulého -la (města stála, slova zazněla).",
     check: (sentence) => {
-      const regex = /\b(města|okna|auta|slova|díla|zvířata|kuřata|dívčata|srdce|údolí)\b\s+([^.!?]*?\b)(\w+(?:li|ly))\b/gi;
+      const regex = /(?<![\p{L}\p{N}_])(města|okna|auta|slova|díla|zvířata|kuřata|dívčata|srdce|údolí)(?![\p{L}\p{N}_])\s+([^.!?]*?)(?<![\p{L}\p{N}_])([\p{L}]+(?:li|ly))(?![\p{L}\p{N}_])/giu;
       const matches = [];
       let match;
       while ((match = regex.exec(sentence.text)) !== null) {
@@ -102,7 +102,7 @@ export const CZECH_GRAMMAR_RULES = [
     check: (sentence) => {
       const matches = [];
       // 4th case verbs expecting MĚ (e.g. vidí mě, miluje mě, překvapil mě, zná mě, slyší mě, viděl mně -> error)
-      const verb4thWithMne = /\b(vidí|viděl|miluje|miloval|slyší|slyšel|zná|znal|opustil|překvapil|sleduje|sledoval|objal|napadl|zabil|zavolal|potkal)\b\s+(mně)\b/gi;
+      const verb4thWithMne = /(?<![\p{L}\p{N}_])(vidí|viděl|miluje|miloval|slyší|slyšel|zná|znal|opustil|překvapil|sleduje|sledoval|objal|napadl|zabil|potkal)(?![\p{L}\p{N}_])\s+(mně)(?![\p{L}\p{N}_])/giu;
       let m;
       while ((m = verb4thWithMne.exec(sentence.text)) !== null) {
         const mneText = m[2];
@@ -116,7 +116,7 @@ export const CZECH_GRAMMAR_RULES = [
       }
 
       // 3rd case verbs expecting MNĚ (e.g. řekl mě, pomohl mě, rozumí mě, věří mě, napsal mě -> error)
-      const verb3rdWithMe = /\b(říká|řekl|řekla|řekli|řekly|řeklo|pomohl|pomohla|pomohli|pomáhá|pomáhal|rozumí|rozuměl|rozuměla|věří|věřil|věřila|napsal|napsala|předal|předala|popřál|popřála|daroval|darovala|odpustil|odpustila)\b\s+(mě)\b/gi;
+      const verb3rdWithMe = /(?<![\p{L}\p{N}_])(říká|řekl|řekla|řekli|řekly|řeklo|pomohl|pomohla|pomohli|pomáhá|pomáhal|rozumí|rozuměl|rozuměla|věří|věřil|věřila|napsal|napsala|předal|předala|popřál|popřála|daroval|darovala|odpustil|odpustila|zavolal|zavolala)(?![\p{L}\p{N}_])\s+(mě)(?![\p{L}\p{N}_])/giu;
       while ((m = verb3rdWithMe.exec(sentence.text)) !== null) {
         const meText = m[2];
         matches.push({
@@ -129,7 +129,7 @@ export const CZECH_GRAMMAR_RULES = [
       }
 
       // Prepositions expecting MĚ (pro mě, přes mě, za mě, ob mě, beze mě) vs MNĚ (o mně, v mně, při mně, ke mně, díky mně)
-      const prep4thWithMne = /\b(pro|přes|beze|ob|za)\s+(mně)\b/gi;
+      const prep4thWithMne = /(?<![\p{L}\p{N}_])(pro|přes|beze|ob|za)(?![\p{L}\p{N}_])\s+(mně)(?![\p{L}\p{N}_])/giu;
       while ((m = prep4thWithMne.exec(sentence.text)) !== null) {
         matches.push({
           startIndex: sentence.startIndex + m.index + m[1].length + 1,
@@ -140,7 +140,7 @@ export const CZECH_GRAMMAR_RULES = [
         });
       }
 
-      const prep6thWithMe = /\b(o|v|ve|při|ke|díky)\s+(mě)\b/gi;
+      const prep6thWithMe = /(?<![\p{L}\p{N}_])(o|v|ve|při|ke|díky)(?![\p{L}\p{N}_])\s+(mě)(?![\p{L}\p{N}_])/giu;
       while ((m = prep6thWithMe.exec(sentence.text)) !== null) {
         matches.push({
           startIndex: sentence.startIndex + m.index + m[1].length + 1,
@@ -164,7 +164,7 @@ export const CZECH_GRAMMAR_RULES = [
     check: (sentence) => {
       const matches = [];
       // 4th case verb with long 'jí' (viděl jí, miluje jí, znal jí -> should be 'ji')
-      const verb4thWithJiLong = /\b(vidí|viděl|miluje|miloval|slyší|slyšel|zná|znal|opustil|objal|políbil|sleduje|sledoval|potkal)\b\s+(jí)\b/gi;
+      const verb4thWithJiLong = /(?<![\p{L}\p{N}_])(vidí|viděl|miluje|miloval|slyší|slyšel|zná|znal|opustil|objal|políbil|sleduje|sledoval|potkal)(?![\p{L}\p{N}_])\s+(jí)(?![\p{L}\p{N}_])/giu;
       let m;
       while ((m = verb4thWithJiLong.exec(sentence.text)) !== null) {
         matches.push({
@@ -177,7 +177,9 @@ export const CZECH_GRAMMAR_RULES = [
       }
 
       // 3rd case verb with short 'ji' (říká ji, řekl ji, věří ji -> should be 'jí')
-      const verb3rdWithJiShort = /\b(říká|řekl|pomohl|pomáhá|rozumí|rozuměl|věří|věřil|napsal|daroval|odpustil|podal|předal)\b\s+(ji)\b/gi;
+      // Limit this to verbs that require a dative object; verbs such as "podat"
+      // and "napsat" can take an accusative "ji" and are ambiguous without context.
+      const verb3rdWithJiShort = /(?<![\p{L}\p{N}_])(říká|řekl|pomohl|pomáhá|rozumí|rozuměl|věří|věřil|odpustil|odpustila|popřál|popřála)(?![\p{L}\p{N}_])\s+(ji)(?![\p{L}\p{N}_])/giu;
       while ((m = verb3rdWithJiShort.exec(sentence.text)) !== null) {
         matches.push({
           startIndex: sentence.startIndex + m.index + m[1].length + 1,
@@ -200,7 +202,7 @@ export const CZECH_GRAMMAR_RULES = [
     check: (sentence) => {
       const matches = [];
       // pro ní, přes ní, za ní (4th case) -> should be 'ni'
-      const prep4thWithNiLong = /\b(pro|přes)\s+(ní)\b/gi;
+      const prep4thWithNiLong = /(?<![\p{L}\p{N}_])(pro|přes)(?![\p{L}\p{N}_])\s+(ní)(?![\p{L}\p{N}_])/giu;
       let m;
       while ((m = prep4thWithNiLong.exec(sentence.text)) !== null) {
         matches.push({
@@ -213,7 +215,7 @@ export const CZECH_GRAMMAR_RULES = [
       }
 
       // bez ni, do ni, u ni, o ni, v ni (6th/2nd case) -> should be 'ní'
-      const prep26WithNiShort = /\b(bez|do|u|od|k|ke|o|v|ve|při)\s+(ni)\b/gi;
+      const prep26WithNiShort = /(?<![\p{L}\p{N}_])(bez|do|u|od|k|ke|o|v|ve|při)(?![\p{L}\p{N}_])\s+(ni)(?![\p{L}\p{N}_])/giu;
       while ((m = prep26WithNiShort.exec(sentence.text)) !== null) {
         matches.push({
           startIndex: sentence.startIndex + m.index + m[1].length + 1,
@@ -343,7 +345,7 @@ export const CZECH_GRAMMAR_RULES = [
     check: (sentence) => {
       const matches = [];
       // Match word boundary without a comma before sub-conjunctions
-      const regex = /([^,\s\n!?:;—–])\s+\b(že|aby|abych|abys|abychom|abyšte|protože|jelikož|když|pokud|jakmile|ačkoliv|přestože|zatímco|který|která|které|kteří|kterého|kterému|jenž|jež)\b/gi;
+      const regex = /([^,\s\n!?:;—–])\s+(že|aby|abych|abys|abychom|abyšte|protože|jelikož|když|pokud|jakmile|ačkoliv|přestože|zatímco|který|která|které|kteří|kterého|kterému|jenž|jež)(?![\p{L}\p{N}_])/giu;
       let m;
       while ((m = regex.exec(sentence.text)) !== null) {
         const conj = m[2];
